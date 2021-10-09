@@ -1,13 +1,14 @@
 openapi: 3.0.0
-title: JaPong Cluster Manager
-description: API specification of JaPong Cluster Manager
-contact:
-  name: Yuji Tabata
-  url: https://yuji.page
-  email: yuji.jd.tabata@gmail.com
-version: 0.1.0
+info:
+  title: JaPong Cluster Manager
+  description: API specification of JaPong Cluster Manager
+  contact:
+    name: Yuji Tabata
+    url: https://yuji.page
+    email: yuji.jd.tabata@gmail.com
+  version: 0.1.0
 servers:
-- url: https://cluster-manager.japong.yuji.page/v1
+- url: https://japong.yuji.page
   description: Production server
 paths:
   /games:
@@ -32,8 +33,14 @@ paths:
               properties:
                 region:
                   type: string
+                  enum:
+                    - us-central
+                    - asia-northeast
                 roomNo:
                   type: integer
+              example:
+                region: us-central
+                roomNo: 2
       responses:
         '200':
           description: Successfully entered into a game room.
@@ -46,7 +53,29 @@ paths:
                     type: string
                     format: url
               example:
-                gameRoomURL: https://japong.yuji.page/v1/
+                gameRoomURL: https://us-central.japong.yuji.page/v1/?room=2
+        '404':
+          description: The requested room does not exist.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                 code:
+                  type: string
+                  enum:
+                    - ROOM_NOT_EXIST
+        '409':
+          description: The requested room is already full.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                 code:
+                  type: string
+                  enum:
+                    - ROOM_ALREADY_FULL
 components:
   schemas:
     GameState:
