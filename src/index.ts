@@ -11,13 +11,21 @@ yargs(hideBin(process.argv))
       default: 5000
     }),
     argv => {
-      // const app = express();
-      console.log(`hello world, argv.port = ${argv.port}, argv.usCentralUrl = ${argv.usCentralUrl}`);
+      const app = express();
+      app.listen(argv.port, () => {
+        initLog(argv);
+      })
     })
   .option('usCentralUrl', {
     alias: 'us-central-url',
-    description: 'URL of the node in the us-central region'
+    type: 'string',
+    describe: 'URL of the node in the us-central region'
   })
   .demandOption(['usCentralUrl'], 'Please provide the urls of your JaPong nodes.')
   .help()
   .parse();
+
+function initLog(argv: yargs.Arguments) {
+  console.log(`Listening at ${argv.port}`);
+  console.log(`us-central-url: ${argv.usCentralUrl}`);
+}
