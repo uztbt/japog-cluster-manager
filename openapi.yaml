@@ -1,0 +1,107 @@
+openapi: 3.0.0
+info:
+  title: JaPong Cluster Manager
+  description: API specification of JaPong Cluster Manager
+  contact:
+    name: Yuji Tabata
+    url: https://yuji.page
+    email: yuji.jd.tabata@gmail.com
+  version: 0.1.0
+servers:
+- url: https://japong.yuji.page
+  description: Production server
+paths:
+  /games:
+    get:
+      description: Returns the states of all the game rooms in the cluster.
+      responses:
+        '200':
+          description: A list of game states.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameState'
+    post:
+      description: Enter a game room.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                region:
+                  type: string
+                  enum:
+                    - us-central
+                    - asia-northeast
+                roomNo:
+                  type: integer
+              example:
+                region: us-central
+                roomNo: 2
+      responses:
+        '200':
+          description: Successfully entered into a game room.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gameRoomURL:
+                    type: string
+                    format: url
+              example:
+                gameRoomURL: https://us-central.japong.yuji.page/v1/?room=2
+        '404':
+          description: The requested room does not exist.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                 code:
+                  type: string
+                  enum:
+                    - ROOM_NOT_EXIST
+        '409':
+          description: The requested room is already full.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                 code:
+                  type: string
+                  enum:
+                    - ROOM_ALREADY_FULL
+components:
+  schemas:
+    GameState:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - NO_PLAYERS
+            - ONLY_PLAYER_0
+            - ONLY_PLAYER_1
+            - IN_GAME
+            - FINISHED
+        player0:
+          type: string
+          nullable: true
+        player1:
+          type: string
+          nullable: true
+        scores:
+          type: array
+          items:
+            type: integer
+          nullable: true
+      example:
+        status: IN_GAME
+        player0: Kevin
+        player1: Eric
+        scores: [2, 1]
