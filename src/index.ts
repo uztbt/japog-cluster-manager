@@ -1,6 +1,6 @@
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers';
-import { app } from './routes';
+import { App } from './app';
 
 yargs(hideBin(process.argv))
   .command(
@@ -11,6 +11,7 @@ yargs(hideBin(process.argv))
       default: 5000
     }),
     argv => {
+      const app = new App();
       app.listen(argv.port, () => {
         initLog(argv);
       })

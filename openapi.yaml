@@ -22,7 +22,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/GameState'
+                  $ref: '#/components/schemas/GameOverview'
     post:
       description: Enter a game room.
       requestBody:
@@ -78,7 +78,7 @@ paths:
                     - ROOM_ALREADY_FULL
 components:
   schemas:
-    GameState:
+    GameOverview:
       type: object
       properties:
         status:
