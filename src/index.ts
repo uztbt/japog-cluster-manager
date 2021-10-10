@@ -1,6 +1,6 @@
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers';
-import express from 'express';
+import { app } from './routes';
 
 yargs(hideBin(process.argv))
   .command(
@@ -11,7 +11,6 @@ yargs(hideBin(process.argv))
       default: 5000
     }),
     argv => {
-      const app = express();
       app.listen(argv.port, () => {
         initLog(argv);
       })
@@ -26,6 +25,9 @@ yargs(hideBin(process.argv))
   .parse();
 
 function initLog(argv: yargs.Arguments) {
-  console.log(`Listening at ${argv.port}`);
+  console.log('===== Settings =====');
+  console.log(`port: ${argv.port}`);
   console.log(`us-central-url: ${argv.usCentralUrl}`);
+  console.log('====================');
+  console.log(`Express is listening at port ${argv.port}`);
 }
